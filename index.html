@@ -105,11 +105,17 @@
       overflow: auto;
       cursor: pointer;
       user-select: text;
+      -webkit-tap-highlight-color: rgba(17, 24, 39, .08);
+    }
+
+    .content:active {
+      background: #f3f4f6;
+      border-radius: 10px;
     }
 
     .actions {
       display: grid;
-      grid-template-columns: 1fr 1.35fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
       margin-top: 10px;
       align-items: center;
@@ -121,12 +127,6 @@
       padding: 9px 8px;
       font-size: 13px;
       line-height: 1.2;
-    }
-
-    .actions .copyBtn {
-      min-height: 54px;
-      font-size: 18px;
-      font-weight: 850;
     }
 
     dialog {
@@ -452,7 +452,6 @@
           <pre class="content">${escapeHTML(item.content)}</pre>
           <div class="actions">
             <button class="editBtn secondary" type="button">編輯</button>
-            <button class="copyBtn" type="button">複製</button>
             <button class="pinBtn secondary" type="button">${item.pinned ? "取消釘選" : "釘選"}</button>
           </div>
         </article>
@@ -464,10 +463,6 @@
         const index = Number(card.dataset.index);
 
         card.querySelector(".content").addEventListener("click", () => {
-          copyText(prompts[index].content);
-        });
-
-        card.querySelector(".copyBtn").addEventListener("click", () => {
           copyText(prompts[index].content);
         });
 
