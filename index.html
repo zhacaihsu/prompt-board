@@ -318,6 +318,12 @@
     "content": "===End===\n/analyze ::zh-tw"
   },
   {
+    "title": "/analyze //briefly",
+    "description": "/analyze //briefly ::zh-tw",
+    "pinned": true,
+    "content": "===End===\n/analyze //briefly ::zh-tw"
+  },
+  {
     "title": "/analyze ?ai-like",
     "description": "/analyze ::zh-tw ?ai-like",
     "pinned": true,
@@ -375,9 +381,9 @@
     function load() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? normalize(JSON.parse(raw)) : DEFAULT_PROMPTS;
+        return migrate(raw ? normalize(JSON.parse(raw)) : DEFAULT_PROMPTS);
       } catch {
-        return DEFAULT_PROMPTS;
+        return migrate(DEFAULT_PROMPTS);
       }
     }
 
@@ -393,6 +399,25 @@
         pinned: Boolean(item.pinned),
         content: String(item.content || "")
       })).filter(item => item.content.trim());
+    }
+
+    function migrate(items) {
+      const itemToAdd = {
+        title: "/analyze //briefly",
+        description: "/analyze //briefly ::zh-tw",
+        pinned: true,
+        content: "===End===\n/analyze //briefly ::zh-tw"
+      };
+
+      const exists = items.some(item => item.content.trim() === itemToAdd.content.trim());
+
+      if (!exists) {
+        const afterIndex = items.findIndex(item => item.content.trim() === "===End===\n/analyze ::zh-tw");
+        const insertAt = afterIndex >= 0 ? afterIndex + 1 : items.length;
+        items.splice(insertAt, 0, itemToAdd);
+      }
+
+      return items;
     }
 
     function escapeHTML(value) {
