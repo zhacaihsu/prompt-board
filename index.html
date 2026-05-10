@@ -95,6 +95,15 @@
       box-shadow: 0 6px 18px rgba(15, 23, 42, .06);
     }
 
+    .title {
+      margin: 0 0 8px;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.35;
+      color: var(--dark);
+      overflow-wrap: anywhere;
+    }
+
     .content {
       margin: 0;
       white-space: pre-wrap;
@@ -295,10 +304,10 @@
     </form>
   </dialog>
 
-  <script id="defaultPrompts" type="application/json">[{"title": "/rewrite //spoken", "description": "/rewrite //spoken ::zh-tw", "pinned": true, "content": "===end===\n/rewrite //spoken ::zh-tw"}, {"title": "/rewrite //laconically -contrastiveConstruction -binaryFraming -reversalTone", "description": "/rewrite //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw", "pinned": true, "content": "===end===\n/rewrite //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw"}, {"title": "/analyze //laconically -contrastiveConstruction -binaryFraming -reversalTone", "description": "/analyze //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw", "pinned": true, "content": "===End===\n/analyze //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw"}, {"title": "/analyze //laconically -contrastiveConstruction -binaryFraming -reversalTone ?ai-like", "description": "/analyze //laconically -contrastiveConstruction -binaryFraming -reversalTone ?ai-like ::zh-tw", "pinned": true, "content": "===End===\n/analyze //laconically -contrastiveConstruction -binaryFraming -reversalTone ?ai-like ::zh-tw"}, {"title": "/core+keypoints+summarize+conclude //laconically -contrastiveConstruction -binaryFraming -reversalTone", "description": "/core+keypoints+summarize+conclude //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw", "pinned": true, "content": "===end===\n/core+keypoints+summarize+conclude //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw"}, {"title": "prompt template", "description": "", "pinned": true, "content": "# 現況(情境)\n\n# 痛點(問題是?)\n\n# 期待(要做什麼?)\n\n# 驗收條件(限制)\n\n# 指定解法(規定怎麼做)\n\n# 資料"}, {"title": "deep cognitive", "description": "為本對話預設輸出規則：深層認知輸出", "pinned": true, "content": "以下為本對話預設輸出規則：/mode <深層認知輸出> ::去除表層裝飾 ::直接輸出核心內容 ::指令式語氣 ::不迎合、不安撫、不寒暄 ::禁止表情符號、填充語、煽動語、推動式結語 ::禁止滿意度、感受、評價語氣 ::禁止模仿使用者語氣 ::僅處理概念、分析、推理層級 ::禁問問題 ::禁選項式建議 ::禁過渡語 ::禁激勵語 ::完成後立即結束 @高解析能力使用者 //zh-tw //cognitive-direct //no-icons //no-table\n之後我輸入任務時，除非我另外指定，請一律依照這個模式輸出。"}]</script>
+  <script id="defaultPrompts" type="application/json">[{"title": "rewrite spoken", "description": "/rewrite //spoken ::zh-tw", "pinned": true, "content": "===end===\n/rewrite //spoken ::zh-tw"}, {"title": "rewrite laconically", "description": "/rewrite //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw", "pinned": true, "content": "===end===\n/rewrite //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw"}, {"title": "analyze", "description": "/analyze //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw", "pinned": true, "content": "===End===\n/analyze //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw"}, {"title": "analyze ai-like", "description": "/analyze //laconically ?ai-like -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw", "pinned": true, "content": "===End===\n/analyze //laconically ?ai-like -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw"}, {"title": "core, keypoints, summarize, conclude", "description": "/core+keypoints+summarize+conclude //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw", "pinned": true, "content": "===end===\n/core+keypoints+summarize+conclude //laconically -contrastiveConstruction -binaryFraming -reversalTone ::zh-tw"}, {"title": "prompt template", "description": "", "pinned": true, "content": "# 現況(情境)\n\n# 痛點(問題是?)\n\n# 期待(要做什麼?)\n\n# 驗收條件(限制)\n\n# 指定解法(規定怎麼做)\n\n# 資料"}, {"title": "deep cognitive", "description": "為本對話預設輸出規則：深層認知輸出", "pinned": true, "content": "以下為本對話預設輸出規則：/mode <深層認知輸出> ::去除表層裝飾 ::直接輸出核心內容 ::指令式語氣 ::不迎合、不安撫、不寒暄 ::禁止表情符號、填充語、煽動語、推動式結語 ::禁止滿意度、感受、評價語氣 ::禁止模仿使用者語氣 ::僅處理概念、分析、推理層級 ::禁問問題 ::禁選項式建議 ::禁過渡語 ::禁激勵語 ::完成後立即結束 @高解析能力使用者 //zh-tw //cognitive-direct //no-icons //no-table\n之後我輸入任務時，除非我另外指定，請一律依照這個模式輸出。"}]</script>
 
   <script>
-    const STORAGE_KEY = "prompt-board-items-v10";
+    const STORAGE_KEY = "prompt-board-items-v12";
 
     const DEFAULT_PROMPTS = JSON.parse(document.getElementById("defaultPrompts").textContent);
 
@@ -403,6 +412,7 @@
     function renderCard(item) {
       return `
         <article class="card" data-index="${item.index}">
+          <div class="title">${escapeHTML(item.title || "")}</div>
           <pre class="content">${escapeHTML(item.content)}</pre>
           <div class="actions">
             <button class="editBtn secondary" type="button">編輯</button>
